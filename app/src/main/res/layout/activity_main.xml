@@ -30,4 +30,11 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+
+    <fragment
+        android:id="@+id/details_fragment"
+        class="kamil.ciupa.astrotime.FragmentSun"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </android.support.design.widget.CoordinatorLayout>

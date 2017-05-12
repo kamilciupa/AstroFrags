@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
         b = dialogBuilder.create();
 
         Button a = (Button) dialogView.findViewById(R.id.bOK);
-        EditText lt = (EditText) dialogView.findViewById(R.id.LatitudeET);
-        EditText lg = (EditText) dialogView.findViewById(R.id.LongitudeET);
+         final EditText lt = (EditText) dialogView.findViewById(R.id.LatitudeET);
+        final EditText lg = (EditText) dialogView.findViewById(R.id.LongitudeET);
         lt.setText(Double.toString(latitude));
         lg.setText(Double.toString(longitude));
 
@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-//                latitude = Double.parseDouble( lt.getText().toString());
+                latitude = Double.parseDouble(lt.getText().toString());
+                longitude = Double.parseDouble(lg.getText().toString());
                 b.dismiss();
             }
         });
