@@ -3,6 +3,7 @@ package kamil.ciupa.astrotime;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,13 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.astrocalculator.AstroCalculator;
+import com.astrocalculator.AstroDateTime;
 
 public class MainActivity extends AppCompatActivity {
 
     AstroCalculator.Location location;
     double latitude;
     double longitude;
-    boolean isDialogOn = false;
     AlertDialog b;
 
     @Override
@@ -39,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(new CustomPageAdapter(this));
+
+
         latitude = 10.00;
         longitude = 10.00;
         location = new AstroCalculator.Location(latitude,longitude);
@@ -48,27 +55,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-           // return true;
             showOptionsDialog();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+
+    /*
+    Shows dialog with options. Allow to change longitude, latitude and frequency of refresh data.
+     */
     private void showOptionsDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         b = dialogBuilder.create();
 
         Button a = (Button) dialogView.findViewById(R.id.bOK);
-         final EditText lt = (EditText) dialogView.findViewById(R.id.LatitudeET);
+        final EditText lt = (EditText) dialogView.findViewById(R.id.LatitudeET);
         final EditText lg = (EditText) dialogView.findViewById(R.id.LongitudeET);
         lt.setText(Double.toString(latitude));
         lg.setText(Double.toString(longitude));
@@ -95,16 +98,17 @@ public class MainActivity extends AppCompatActivity {
                 b.dismiss();
             }
         });
-
-
-
-
-
         b.show();
-
-
     }
 
+        public void calculateSomething() {
+            AstroDateTime datetime = new AstroDateTime();
+
+            AstroCalculator calcu = new AstroCalculator(datetime, location);
+
+            calcu.getSunInfo().getAzimuthRise();
+
+        }
 
 
 
