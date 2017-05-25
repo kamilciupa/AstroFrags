@@ -13,17 +13,27 @@ import android.view.ViewGroup;
 
 
 
-//1
+
 public class FragmentMoon extends Fragment {
-    //2
+
     public static FragmentMoon newInstance() {
-        return new FragmentMoon();
+
+        Bundle args = new Bundle();
+        FragmentMoon fragment = new FragmentMoon();
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    //3
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_moon, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_moon, container, false);
+        return view;
     }
 }

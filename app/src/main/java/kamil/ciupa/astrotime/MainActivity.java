@@ -3,6 +3,10 @@ package kamil.ciupa.astrotime;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     double latitude;
     double longitude;
     AlertDialog b;
+    FragmentPagerAdapter fragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +45,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(new CustomPageAdapter(this));
-
-
         latitude = 10.00;
         longitude = 10.00;
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        fragmentPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), longitude, latitude);
+        viewPager.setAdapter(fragmentPagerAdapter);
+
+
+
+
         location = new AstroCalculator.Location(latitude,longitude);
 
 
@@ -101,16 +108,48 @@ public class MainActivity extends AppCompatActivity {
         b.show();
     }
 
-        public void calculateSomething() {
-            AstroDateTime datetime = new AstroDateTime();
+//        public void calculateSomething() {
+//            AstroDateTime datetime = new AstroDateTime();
+//
+//            AstroCalculator calcu = new AstroCalculator(datetime, location);
+//
+//            calcu.getSunInfo().getAzimuthRise();
+//
+//        }
 
-            AstroCalculator calcu = new AstroCalculator(datetime, location);
+    public static class MyPagerAdapter extends FragmentPagerAdapter {
 
-            calcu.getSunInfo().getAzimuthRise();
+        private static int NUM_COUNT = 2;
+        double longitude, latitude;
 
+      public  MyPagerAdapter(FragmentManager fragmentManager, double longitude, double latitude){
+          super(fragmentManager);
+          this.longitude = longitude;
+          this.latitude = latitude;
+      }
+
+        @Override
+        public int getCount() {
+            return NUM_COUNT;
         }
 
+        @Override
+        public Fragment getItem(int position) {
+            switch (position){
+                case 0:
+                    return FragmentSun.newInstance(longitude, latitude);
+                case 1:
+                    return FragmentMoon.newInstance();
+                default:
+                    return null;
+            }
+        }
 
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return super.getPageTitle(position);
+        }
+    }
 
 
 
