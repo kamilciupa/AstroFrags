@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     double longitude;
     AlertDialog b;
     FragmentPagerAdapter fragmentPagerAdapter;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         latitude = 10.00;
         longitude = 10.00;
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
         fragmentPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), longitude, latitude);
         viewPager.setAdapter(fragmentPagerAdapter);
 
@@ -102,20 +103,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 latitude = Double.parseDouble(lt.getText().toString());
                 longitude = Double.parseDouble(lg.getText().toString());
+
+//                FragmentSun frag = (FragmentSun) fragmentPagerAdapter.getItem(0);
+//                frag.newInstance(longitude,latitude);
+//                fragmentPagerAdapter.saveState();
                 b.dismiss();
             }
         });
         b.show();
     }
 
-//        public void calculateSomething() {
-//            AstroDateTime datetime = new AstroDateTime();
-//
-//            AstroCalculator calcu = new AstroCalculator(datetime, location);
-//
-//            calcu.getSunInfo().getAzimuthRise();
-//
-//        }
+
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
 
