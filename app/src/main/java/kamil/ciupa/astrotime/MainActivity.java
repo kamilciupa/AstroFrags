@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
-    
+
     double latitude = 10.0;
     double longitude = 10.0;
     AlertDialog b;
@@ -52,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentsList.add(FragmentMoon.class.getName());
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new MainActivity.MyPagerAdapter(getSupportFragmentManager());
+        try{
         viewPager.setAdapter(pagerAdapter);
+        } catch (Exception e) {}
         //
 
 
