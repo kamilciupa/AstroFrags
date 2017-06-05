@@ -21,44 +21,61 @@ import android.widget.EditText;
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
-    AstroCalculator.Location location;
-    double latitude;
-    double longitude;
+public class MainActivity extends AppCompatActivity {
+    
+    double latitude = 10.0;
+    double longitude = 10.0;
     AlertDialog b;
-    FragmentPagerAdapter fragmentPagerAdapter;
+    PagerAdapter pagerAdapter;
     ViewPager viewPager;
+    List<String> fragmentsList;
+
+    public double getLatitude(){
+        return latitude;
+    }
+
+    public double getLongitude(){
+        return longitude;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //
+        fragmentsList = new ArrayList<>();
+        fragmentsList.add(FragmentSun.class.getName());
+        fragmentsList.add(FragmentMoon.class.getName());
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        pagerAdapter = new MainActivity.MyPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        //
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+    }
 
-        latitude = 10.00;
-        longitude = 10.00;
-
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        fragmentPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), longitude, latitude);
-        viewPager.setAdapter(fragmentPagerAdapter);
-
-
-
-
-        location = new AstroCalculator.Location(latitude,longitude);
-
-
+    @Override
+    public void onBackPressed() {
+        if(viewPager.getCurrentItem() == 0){
+            super.onBackPressed();
+        } else {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
     }
 
     @Override
@@ -104,9 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 latitude = Double.parseDouble(lt.getText().toString());
                 longitude = Double.parseDouble(lg.getText().toString());
 
-//                FragmentSun frag = (FragmentSun) fragmentPagerAdapter.getItem(0);
-//                frag.newInstance(longitude,latitude);
-//                fragmentPagerAdapter.saveState();
                 b.dismiss();
             }
         });
@@ -115,16 +129,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public static class MyPagerAdapter extends FragmentPagerAdapter {
+    private class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private static int NUM_COUNT = 2;
+        public List<String> fragmentsListAdapter = new ArrayList<>();
+        private int NUM_COUNT = 2;
         double longitude, latitude;
 
-      public  MyPagerAdapter(FragmentManager fragmentManager, double longitude, double latitude){
-          super(fragmentManager);
-          this.longitude = longitude;
-          this.latitude = latitude;
-      }
+        public MyPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+            fragmentsListAdapter = fragmentsList;
+        }
 
         @Override
         public int getCount() {
@@ -133,23 +147,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
-                case 0:
-                    return FragmentSun.newInstance(longitude, latitude);
-                case 1:
-                    return FragmentMoon.newInstance();
-                default:
-                    return null;
-            }
+            return Fragment.instantiate(getBaseContext(), fragmentsListAdapter.get(position));
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return super.getPageTitle(position);
-        }
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            return super.getPageTitle(position);
+//        }
+//    }
     }
+}
 
 
-
-   }
 

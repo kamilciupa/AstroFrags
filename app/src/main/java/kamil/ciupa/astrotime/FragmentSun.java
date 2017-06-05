@@ -3,15 +3,22 @@ package kamil.ciupa.astrotime;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
+
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 //1
@@ -28,45 +35,83 @@ public class FragmentSun extends Fragment {
     TextView sunsetAz ;
     TextView twilightTime;
     TextView dawnTime ;
+    View view;
+    TextView clock;
 
+//    public static FragmentSun newInstance(double longitude, double latitude) {
+//
+//        FragmentSun fragmentSun = new FragmentSun();
+//        Bundle args = new Bundle();
+//        args.putDouble("longitude", longitude);
+//        args.putDouble("latitude", latitude);
+//        fragmentSun.setArguments(args);
+//        return fragmentSun;
+//    }
 
-    public static FragmentSun newInstance(double longitude, double latitude) {
-
-        FragmentSun fragmentSun = new FragmentSun();
-        Bundle args = new Bundle();
-        args.putDouble("longitude", longitude);
-        args.putDouble("latitude", latitude);
-        fragmentSun.setArguments(args);
-        return fragmentSun;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
 
 
 //    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_sun, container, false);
-//        wschodTime = (TextView) view.findViewById(R.id.WschodTimeWart);
-        double lg = getArguments().getDouble("longitude");
-        double lt = getArguments().getDouble("latitude");
-        //
-        astroDateTime = new AstroDateTime();
-        location = new AstroCalculator.Location(lt, lg);
-        calculator = new AstroCalculator(astroDateTime, location);
+        setHasOptionsMenu(true);
+        view = inflater.inflate(R.layout.fragment_sun, container, false);
+        setSunData(10.0, 10.0, view );
 
-        initiateElements(view);
+        clock = (TextView) view.findViewById(R.id.timeInSun);
+//        Timer clockTimer = new Timer();
+//        TimerTask clockTimerRefresh = new TimerTask() {
+//            @Override
+//            public void run() {
+//                Calendar calendar = Calendar.getInstance();
+//            clock.setText(calendar.get(Calendar.HOUR) + " : " + calendar.get(Calendar.MINUTE) + " : " + calendar.get(Calendar.SECOND));
+//            }
+//        };
+//        clockTimer.schedule(clockTimerRefresh, 0, 1000);
+        CountDownTimer newtimer = new CountDownTimer(1000000000, 1000) {
 
-        sunriseTime.setText(calculator.getSunInfo().getSunrise().toString());
-        sunriseAz.setText(Double.toString(calculator.getSunInfo().getAzimuthRise()));
-        sunsetAz.setText(Double.toString(calculator.getSunInfo().getAzimuthSet()));
-        sunsetTime.setText(calculator.getSunInfo().getSunset().toString());
-        twilightTime.setText(calculator.getSunInfo().getTwilightMorning().toString());
-        dawnTime.setText(calculator.getSunInfo().getTwilightEvening().toString());
+            public void onTick(long millisUntilFinished) {
+                Calendar calendar = Calendar.getInstance();
+                clock.setText(String.format("%02d:%02d:%02d", calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND)));
+            }
+            public void onFinish() {
+            }
+        };
+        newtimer.start();
+
+        try {
+            Timer autoUpdate = new Timer();
+            autoUpdate.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                setSunData(((MainActivity) getActivity()).getLatitude(), ((MainActivity) getActivity()).getLongitude(), view);
+                            }
+                        });
+                    } catch(Exception e) {}
+                }
+
+            }, 0, 300);
+        } catch(Exception e) {}
+
+
+
+
+
+//        initiateElements(view);
+//
+//        sunriseTime.setText(calculator.getSunInfo().getSunrise().toString());
+//        sunriseAz.setText(Double.toString(calculator.getSunInfo().getAzimuthRise()));
+//        sunsetAz.setText(Double.toString(calculator.getSunInfo().getAzimuthSet()));
+//        sunsetTime.setText(calculator.getSunInfo().getSunset().toString());
+//        twilightTime.setText(calculator.getSunInfo().getTwilightMorning().toString());
+//        dawnTime.setText(calculator.getSunInfo().getTwilightEvening().toString());
 
         //
 //        wschodTime.setText(Double.toString(lg + lt));
@@ -74,6 +119,13 @@ public class FragmentSun extends Fragment {
         Tutaj rzeczy z xmla
          */
         return view;
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     public void initiateElements(View view){
@@ -85,5 +137,30 @@ public class FragmentSun extends Fragment {
         dawnTime = (TextView) view.findViewById(R.id.DawnTimeWart);
     }
 
+
+    public void setSunData(double latitude, double longitude, View view){
+
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR);
+        int minute = c.get(Calendar.MINUTE);
+        int second = c.get(Calendar.SECOND);
+        int timezoneOffset = c.get(Calendar.ZONE_OFFSET);
+
+        AstroCalculator calculator = new AstroCalculator(new AstroDateTime(year, month, day + 1, hour, minute, second, timezoneOffset, true),
+                new AstroCalculator.Location(latitude, longitude));
+
+        initiateElements(view);
+
+        sunsetAz.setText(Double.toString(calculator.getSunInfo().getAzimuthSet()));
+        sunsetTime.setText(calculator.getSunInfo().getSunset().toString());
+        sunriseTime.setText(calculator.getSunInfo().getSunrise().toString());
+        sunriseAz.setText(Double.toString(calculator.getSunInfo().getAzimuthRise()));
+        twilightTime.setText(calculator.getSunInfo().getTwilightMorning().toString());
+        dawnTime.setText(calculator.getSunInfo().getTwilightEvening().toString());
+
+    }
 
 }
