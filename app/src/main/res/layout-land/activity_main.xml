@@ -39,7 +39,7 @@
                 android:layout_weight="1"
                 android:id="@+id/fragment_sun"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:name="kamil.ciupa.astrotime.FragmentSun"
                 tools:layout="@layout/fragment_sun"> </fragment>
@@ -48,7 +48,7 @@
                 android:id="@+id/fragment_moon"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:name="kamil.ciupa.astrotime.FragmentMoon"
                 tools:layout="@layout/fragment_moon"> </fragment>
 

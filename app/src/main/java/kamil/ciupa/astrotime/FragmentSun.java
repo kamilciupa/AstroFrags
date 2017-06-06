@@ -62,7 +62,7 @@ public class FragmentSun extends Fragment {
         view = inflater.inflate(R.layout.fragment_sun, container, false);
         setSunData(10.0, 10.0, view );
 
-        clock = (TextView) view.findViewById(R.id.timeInSun);
+        clock = (TextView) view.findViewById(R.id.tTimeSun);
 //        Timer clockTimer = new Timer();
 //        TimerTask clockTimerRefresh = new TimerTask() {
 //            @Override
@@ -99,25 +99,6 @@ public class FragmentSun extends Fragment {
 
             }, 0, 300);
         } catch(Exception e) {}
-
-
-
-
-
-//        initiateElements(view);
-//
-//        sunriseTime.setText(calculator.getSunInfo().getSunrise().toString());
-//        sunriseAz.setText(Double.toString(calculator.getSunInfo().getAzimuthRise()));
-//        sunsetAz.setText(Double.toString(calculator.getSunInfo().getAzimuthSet()));
-//        sunsetTime.setText(calculator.getSunInfo().getSunset().toString());
-//        twilightTime.setText(calculator.getSunInfo().getTwilightMorning().toString());
-//        dawnTime.setText(calculator.getSunInfo().getTwilightEvening().toString());
-
-        //
-//        wschodTime.setText(Double.toString(lg + lt));
-        /*
-        Tutaj rzeczy z xmla
-         */
         return view;
     }
 
@@ -129,12 +110,12 @@ public class FragmentSun extends Fragment {
     }
 
     public void initiateElements(View view){
-        sunriseTime = (TextView) view.findViewById(R.id.WschodTimeWart);
-        sunriseAz = (TextView) view.findViewById(R.id.WschodAzymutWart);
-        sunsetTime = (TextView) view.findViewById(R.id.ZachodTimeWart);
-        sunsetAz = (TextView) view.findViewById(R.id.ZachodAzymutWart);
-        twilightTime = (TextView) view.findViewById(R.id.TwilightTimeWart);
-        dawnTime = (TextView) view.findViewById(R.id.DawnTimeWart);
+        sunriseTime = (TextView) view.findViewById(R.id.tWschodSCzasWartosc);
+        sunriseAz = (TextView) view.findViewById(R.id.tWschodSAzymWart);
+        sunsetTime = (TextView) view.findViewById(R.id.tZachodSCzasWartosc);
+        sunsetAz = (TextView) view.findViewById(R.id.tZachodSAzymutWarto);
+        twilightTime = (TextView) view.findViewById(R.id.tZmierzchWart);
+        dawnTime = (TextView) view.findViewById(R.id.tSwitWart);
     }
 
 
@@ -154,12 +135,12 @@ public class FragmentSun extends Fragment {
 
         initiateElements(view);
 
-        sunsetAz.setText(Double.toString(calculator.getSunInfo().getAzimuthSet()));
-        sunsetTime.setText(calculator.getSunInfo().getSunset().toString());
-        sunriseTime.setText(calculator.getSunInfo().getSunrise().toString());
-        sunriseAz.setText(Double.toString(calculator.getSunInfo().getAzimuthRise()));
-        twilightTime.setText(calculator.getSunInfo().getTwilightMorning().toString());
-        dawnTime.setText(calculator.getSunInfo().getTwilightEvening().toString());
+        sunsetAz.setText(Double.toString(Math.floor(calculator.getSunInfo().getAzimuthSet()) ));
+        sunsetTime.setText(calculator.getSunInfo().getSunset().toString().substring(10,16));
+        sunriseTime.setText(calculator.getSunInfo().getSunrise().toString().substring(10,16));
+        sunriseAz.setText(Double.toString(Math.floor(calculator.getSunInfo().getAzimuthRise())));
+        twilightTime.setText(calculator.getSunInfo().getTwilightMorning().toString().substring(10,16));
+        dawnTime.setText(calculator.getSunInfo().getTwilightEvening().toString().substring(10,16));
 
     }
 

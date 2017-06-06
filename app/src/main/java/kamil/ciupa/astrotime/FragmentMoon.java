@@ -39,7 +39,7 @@ public class FragmentMoon extends Fragment {
         setHasOptionsMenu(true);
         view = inflater.inflate(R.layout.fragment_moon, container, false);
         setMoonData(10.0, 10.0, view);
-        clock = (TextView) view.findViewById(R.id.timeInMoon);
+        clock = (TextView) view.findViewById(R.id.tTimeMoon);
 
         CountDownTimer newtimer = new CountDownTimer(1000000000, 1000) {
 
@@ -82,12 +82,12 @@ public class FragmentMoon extends Fragment {
 
     public void initiateElements(View view){
 
-        wschodTime = (TextView) view.findViewById(R.id.WscheWart);
-        zachodTime = (TextView) view.findViewById(R.id.WschodTimeWart);
-        newMoon = (TextView) view.findViewById(R.id.WheWart);
-        fullMoon = (TextView) view.findViewById(R.id.WscimeWart);
-        phase = (TextView) view.findViewById(R.id.PhaseWart);
-        lunear = (TextView) view.findViewById(R.id.LuminationWart);
+        wschodTime = (TextView) view.findViewById(R.id.tMoonWschodCzasWart);
+        zachodTime = (TextView) view.findViewById(R.id.tMoonZachodCzasWart);
+        newMoon = (TextView) view.findViewById(R.id.tMoonNowWart);
+        fullMoon = (TextView) view.findViewById(R.id.tMoonpelniaWart);
+        phase = (TextView) view.findViewById(R.id.tMoonFazaWart);
+        lunear = (TextView) view.findViewById(R.id.tMoonDzienWart);
     }
 
 
@@ -107,12 +107,12 @@ public class FragmentMoon extends Fragment {
 
         initiateElements(view);
 
-        wschodTime.setText(calculator.getMoonInfo().getMoonrise().toString());
-        zachodTime.setText(calculator.getMoonInfo().getMoonset().toString());
-        newMoon.setText(calculator.getMoonInfo().getNextNewMoon().toString());
-        fullMoon.setText(calculator.getMoonInfo().getNextFullMoon().toString());
-        phase.setText(Double.toString(calculator.getMoonInfo().getAge()));
-        lunear.setText(Double.toString(calculator.getMoonInfo().getIllumination()));
+        wschodTime.setText(calculator.getMoonInfo().getMoonrise().toString().substring(10,16));
+        zachodTime.setText(calculator.getMoonInfo().getMoonset().toString().substring(10,16));
+        newMoon.setText(calculator.getMoonInfo().getNextNewMoon().toString().substring(0,9));
+        fullMoon.setText(calculator.getMoonInfo().getNextFullMoon().toString().substring(0,9));
+        phase.setText(Double.toString(Math.floor(calculator.getMoonInfo().getIllumination() * 100) / 100) + "%");
+        lunear.setText(Double.toString(Math.floor(calculator.getMoonInfo().getAge() * 100) / 100));
 
     }
 }
