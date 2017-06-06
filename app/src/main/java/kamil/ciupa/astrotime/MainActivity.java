@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
@@ -112,21 +113,26 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.setMessage("Enter text below");
 
         b = dialogBuilder.create();
-
         Button a = (Button) dialogView.findViewById(R.id.bOK);
         final EditText lt = (EditText) dialogView.findViewById(R.id.LatitudeET);
         final EditText lg = (EditText) dialogView.findViewById(R.id.LongitudeET);
         final EditText refTime = (EditText) dialogView.findViewById(R.id.RefreshTimeET);
-        lt.setText(Double.toString(latitude));
-        lg.setText(Double.toString(longitude));
-        refTime.setText(Integer.toString(refreshtime));
+
+                    lt.setText(Double.toString(latitude));
+                    lg.setText(Double.toString(longitude));
+                    refTime.setText(Integer.toString(refreshtime));
+
         a.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+            try {
                 latitude = Double.parseDouble(lt.getText().toString());
                 longitude = Double.parseDouble(lg.getText().toString());
                 refreshtime = Integer.parseInt(refTime.getText().toString());
+            } catch (NumberFormatException e){
+                Toast.makeText(MainActivity.this, "Blad" , Toast.LENGTH_SHORT).show();
+            }
                 b.dismiss();
             }
         });
