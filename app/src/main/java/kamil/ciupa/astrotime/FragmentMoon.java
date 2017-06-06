@@ -65,7 +65,7 @@ public class FragmentMoon extends Fragment {
                     } catch(Exception e) {}
                 }
 
-            }, 0, 300);
+            }, 0,300*((MainActivity) getActivity()).getRefTime());
         } catch(Exception e) {}
 
         return view;

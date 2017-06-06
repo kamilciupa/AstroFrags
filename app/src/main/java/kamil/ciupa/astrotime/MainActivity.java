@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -29,11 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
     double latitude = 10.0;
     double longitude = 10.0;
+    int refreshtime = 1;
     AlertDialog b;
     PagerAdapter pagerAdapter;
     ViewPager viewPager;
     List<String> fragmentsList;
 
+    public int getRefTime() { return refreshtime;}
     public double getLatitude(){
         return latitude;
     }
@@ -113,16 +116,17 @@ public class MainActivity extends AppCompatActivity {
         Button a = (Button) dialogView.findViewById(R.id.bOK);
         final EditText lt = (EditText) dialogView.findViewById(R.id.LatitudeET);
         final EditText lg = (EditText) dialogView.findViewById(R.id.LongitudeET);
+        final EditText refTime = (EditText) dialogView.findViewById(R.id.RefreshTimeET);
         lt.setText(Double.toString(latitude));
         lg.setText(Double.toString(longitude));
-
+        refTime.setText(Integer.toString(refreshtime));
         a.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 latitude = Double.parseDouble(lt.getText().toString());
                 longitude = Double.parseDouble(lg.getText().toString());
-
+                refreshtime = Integer.parseInt(refTime.getText().toString());
                 b.dismiss();
             }
         });
