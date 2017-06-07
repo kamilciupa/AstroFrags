@@ -1,6 +1,7 @@
 package kamil.ciupa.astrotime;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -60,19 +61,26 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         } catch (Exception e) {}
         //
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putDouble("longitude", longitude);
+        outState.putDouble("latitude", latitude);
+        outState.putInt("refresh", refreshtime);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        longitude = savedInstanceState.getDouble("longitude");
+        latitude = savedInstanceState.getDouble("latitude");
+        refreshtime = savedInstanceState.getInt("refresh");
     }
 
     @Override
@@ -109,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         final View dialogView = inflater.inflate(R.layout.options_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        dialogBuilder.setTitle("Custom dialog");
-        dialogBuilder.setMessage("Enter text below");
+        dialogBuilder.setTitle("Change parametes");
+        dialogBuilder.setMessage("Please give data");
 
         b = dialogBuilder.create();
         Button a = (Button) dialogView.findViewById(R.id.bOK);
@@ -127,13 +135,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             try {
-                latitude = Double.parseDouble(lt.getText().toString());
-                longitude = Double.parseDouble(lg.getText().toString());
+                double lattest;
+                double lontest;
+                lattest = Double.parseDouble(lt.getText().toString());
+                lontest = Double.parseDouble(lg.getText().toString());
                 refreshtime = Integer.parseInt(refTime.getText().toString());
+                if(lattest >= -90 && lattest <= 90 &&  lontest >= -180 && lontest <= 180){
+                    latitude = lattest;
+                    longitude = lontest;
+                    b.dismiss();
+                } else {
+                    latitude = 0;
+                    longitude = 0;
+                    Toast.makeText(MainActivity.this, "Wpisz poprawną wartość", Toast.LENGTH_SHORT).show();
+                }
             } catch (NumberFormatException e){
-                Toast.makeText(MainActivity.this, "Blad" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Błędne dane" , Toast.LENGTH_SHORT).show();
             }
-                b.dismiss();
+
             }
         });
         b.show();

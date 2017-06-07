@@ -63,15 +63,6 @@ public class FragmentSun extends Fragment {
         setSunData(10.0, 10.0, view );
 
         clock = (TextView) view.findViewById(R.id.tTimeSun);
-//        Timer clockTimer = new Timer();
-//        TimerTask clockTimerRefresh = new TimerTask() {
-//            @Override
-//            public void run() {
-//                Calendar calendar = Calendar.getInstance();
-//            clock.setText(calendar.get(Calendar.HOUR) + " : " + calendar.get(Calendar.MINUTE) + " : " + calendar.get(Calendar.SECOND));
-//            }
-//        };
-//        clockTimer.schedule(clockTimerRefresh, 0, 1000);
         CountDownTimer newtimer = new CountDownTimer(1000000000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -97,7 +88,7 @@ public class FragmentSun extends Fragment {
                     } catch(Exception e) {}
                 }
 
-            }, 0, 300*((MainActivity) getActivity()).getRefTime());
+            }, 0, 60000*((MainActivity) getActivity()).getRefTime());
         } catch(Exception e) {}
         return view;
     }
